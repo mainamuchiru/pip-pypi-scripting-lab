@@ -1,14 +1,28 @@
 import requests
 from datetime import datetime
 
-log_data = ["User logged in", "User updated profile", "Report exported"]
-filename = f"log_{datetime.now().strftime('%Y%m%d')}.txt"
 
-with open(filename, "w") as file:
-    for entry in log_data:
-        file.write(f"{entry}\n")
+def generate_log(entries):
+    """
+    Generate a timestamped log file from a list of entries.
 
-print(f"Log written to {filename}")
+    Args:
+        entries: A list of log entry strings.
+
+    Raises:
+        ValueError: If entries is not a list.
+    """
+    if not isinstance(entries, list):
+        raise ValueError("Input must be a list.")
+
+    filename = f"log_{datetime.now().strftime('%Y%m%d')}.txt"
+
+    with open(filename, "w") as file:
+        for entry in entries:
+            file.write(f"{entry}\n")
+
+    print(f"Log written to {filename}")
+    return filename
 
 
 def fetch_data():
@@ -17,6 +31,10 @@ def fetch_data():
         return response.json()
     return {}
 
+
 if __name__ == "__main__":
+    log_data = ["User logged in", "User updated profile", "Report exported"]
+    generate_log(log_data)
+
     post = fetch_data()
     print("Fetched Post Title:", post.get("title", "No title found"))
